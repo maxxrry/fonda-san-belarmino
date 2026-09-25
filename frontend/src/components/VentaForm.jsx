@@ -47,6 +47,10 @@ export default function VentaForm({ version = 0, onIntento }) {
         titulo: "Venta autorizada",
         texto: `${venta.unidades} × ${venta.nombre}. Total cobrado: ${pesos(venta.total)}.`,
       });
+      // Venta exitosa: el formulario vuelve a su estado inicial para la siguiente.
+      // En un 409 no se limpia, para que se pueda corregir y reintentar.
+      setBebidaId("");
+      setUnidades("1");
       onIntento();
     } catch (e) {
       if (e.status === 409) {
