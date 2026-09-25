@@ -1,0 +1,53 @@
+# Verificacion automatica: en cada push y pull request compila el backend
+# (con sus tests) y construye el frontend. Si algo falla, GitHub marca el
+# commit con una X roja en la pestana "Actions".
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend (Spring Boot)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven # reutiliza las dependencias descargadas entre ejecuciones
+
+      # verify = compilar + ejecutar los tests + empaquetar el .jar.
+      # Los tests usan H2, asi que no se necesita MySQL en el servidor de GitHub.
+      - name: Compilar y probar
+        run: ./mvnw -B verify
+
+  frontend:
+    name: Frontend (React + Vite)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      # npm ci instala exactamente lo que dice package-lock.json.
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir
+        run: npm run build

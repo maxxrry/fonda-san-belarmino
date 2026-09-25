@@ -104,7 +104,7 @@ Resultados esperados con los datos de `data.sql`:
 - ✅ `BebidaForm` (crear y editar, errores 400 bajo cada campo, sin validación en el navegador). `App` coordina edición y recarga con `version`. `pesos()` en `utils/formato.js`.
 - ✅ `VentaForm`: total del backend si se autoriza, motivo si hay 409, errores 400 por campo. No bloquea bebidas restringidas ni limita unidades: decide el backend. `App` separa `version` (recarga datos) de `formulario` (reinicia `BebidaForm`).
 - ✅ `VentaHistorial`: ventas autorizadas y rechazadas con estado y motivo; se recarga con `version`. Formatos compartidos (`pesos`, `fechaHora`, `textoMotivo`) en `utils/formato.js`. Frontend completo (sección 6).
-- ⬜ `.github/workflows/build.yml` (los tests del backend ya existen: `mvn test`).
+- ✅ `.github/workflows/build.yml`: job backend (`./mvnw -B verify`, Java 21) y job frontend (`npm ci` + `npm run build`, Node 20). `backend/mvnw` marcado como ejecutable en git (100755) para que corra en Linux.
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
 - ✔️ Decidido: se agrega `GET /api/ventas/{id}` para que el `Location` del POST apunte a un recurso real.
 - ℹ️ Los `curl` de 409 y 400 del README no llevan `-H "Content-Type: application/json"`: sin esa cabecera la API responde 415. Al probar hay que agregarla.
