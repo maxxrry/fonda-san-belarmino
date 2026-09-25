@@ -99,7 +99,8 @@ Resultados esperados con los datos de `data.sql`:
 - ✅ `ManejadorGlobalErrores` (`@RestControllerAdvice` que extiende `ResponseEntityExceptionHandler`): 400 `VALIDACION`, 404, 409 y resto de errores de Spring MVC con el formato del contrato; 500 genérico sin traza.
 - ✅ `BebidaController` y `VentaController` (9 rutas, incluida `GET /api/ventas/{id}`). Probados con `curl`; los ejemplos de la sección 7 quedan en `ContratoApiTest` (MockMvc).
 - ✅ `CorsConfig`: autoriza `fonda.cors.origen` en `/api/**` y expone `Location`. Test en `CorsConfigTest`.
-- ⬜ Frontend: `api.js` es solo el esqueleto (funciones con `TODO`). Faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
+- ✅ `api.js`: las 7 funciones implementadas. Todo error se lanza como `ApiError` con `status` (0 = sin conexión), `codigo`, `message` y `campos` (en el 400).
+- ⬜ Frontend: faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
 - ⬜ `.github/workflows/build.yml` (los tests del backend ya existen: `mvn test`).
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
 - ✔️ Decidido: se agrega `GET /api/ventas/{id}` para que el `Location` del POST apunte a un recurso real.
