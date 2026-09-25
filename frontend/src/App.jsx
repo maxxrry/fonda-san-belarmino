@@ -3,6 +3,7 @@ import { Alert, Container } from "react-bootstrap";
 import BebidaForm from "./components/BebidaForm.jsx";
 import BebidaList from "./components/BebidaList.jsx";
 import VentaForm from "./components/VentaForm.jsx";
+import VentaHistorial from "./components/VentaHistorial.jsx";
 import { pesos } from "./utils/formato.js";
 
 /**
@@ -61,6 +62,8 @@ export default function App() {
       <BebidaList onEditar={editar} onCambio={datosCambiaron} version={version} />
 
       <VentaForm version={version} onIntento={datosCambiaron} />
+
+      <VentaHistorial version={version} />
     </Container>
   );
 }

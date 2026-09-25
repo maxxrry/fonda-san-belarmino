@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import { listarBebidas, registrarVenta } from "../services/api.js";
-import { pesos } from "../utils/formato.js";
-
-// Texto de cada motivo de rechazo que puede devolver la API en un 409.
-const MOTIVOS = {
-  VENTA_RESTRINGIDA: "Venta restringida",
-  LIMITE_EXCEDIDO: "Límite por cliente excedido",
-  STOCK_INSUFICIENTE: "Stock insuficiente",
-};
+import { pesos, textoMotivo } from "../utils/formato.js";
 
 // Campo vacio -> null, para que el backend responda "es obligatorio".
 const numero = (texto) => (texto === "" ? null : Number(texto));
@@ -60,7 +53,7 @@ export default function VentaForm({ version = 0, onIntento }) {
         // Venta rechazada: quedo guardada en el historial con su motivo.
         setResultado({
           variante: "warning",
-          titulo: `Venta rechazada: ${MOTIVOS[e.codigo] ?? e.codigo}`,
+          titulo: `Venta rechazada: ${textoMotivo(e.codigo)}`,
           texto: e.message,
         });
         onIntento();
