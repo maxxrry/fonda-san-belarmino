@@ -97,11 +97,13 @@ Resultados esperados con los datos de `data.sql`:
 - ⬜ `BebidaRequest`: falta el validador de las reglas que dependen del tipo (`gradosAlcohol` / `azucarPorLitro`).
 - ✅ `VentaService` (3 verificaciones en orden, stock, total, rechazada guardada con `noRollbackFor`) con `VentaRequest`, `VentaResponse` y `VentaRechazadaException`. Test de integración en `VentaServiceTest`.
 - ✅ `ManejadorGlobalErrores` (`@RestControllerAdvice` que extiende `ResponseEntityExceptionHandler`): 400 `VALIDACION`, 404, 409 y resto de errores de Spring MVC con el formato del contrato; 500 genérico sin traza.
-- ⬜ `controller/` (incluida `GET /api/ventas/{id}`), `config/` (CORS desde `fonda.cors.origen`).
+- ✅ `BebidaController` y `VentaController` (9 rutas, incluida `GET /api/ventas/{id}`). Probados con `curl`; los ejemplos de la sección 7 quedan en `ContratoApiTest` (MockMvc).
+- ⬜ `config/` (CORS desde `fonda.cors.origen`).
 - ⬜ Frontend: `api.js` es solo el esqueleto (funciones con `TODO`). Faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
 - ⬜ Tests y `.github/workflows/build.yml`.
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
-- ✔️ Decidido: se agrega `GET /api/ventas/{id}` para que el `Location` del POST apunte a un recurso real. `VentaService.buscarPorId` ya existe; falta la ruta en `VentaController`.
+- ✔️ Decidido: se agrega `GET /api/ventas/{id}` para que el `Location` del POST apunte a un recurso real.
+- ℹ️ Los `curl` de 409 y 400 del README no llevan `-H "Content-Type: application/json"`: sin esa cabecera la API responde 415. Al probar hay que agregarla.
 - ⚠️ Revisar que `data.sql` funcione en MySQL (en H2 ya carga).
 
 ## Cómo trabajar
