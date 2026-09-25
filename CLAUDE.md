@@ -92,7 +92,9 @@ Resultados esperados con los datos de `data.sql`:
 - ✅ `defer-datasource-initialization=true` en los dos `.properties`.
 - ✅ `repository/`: `BebidaRepository` (filtro por nombre, contiene e ignora mayúsculas), `VentaRepository` (historial por fecha descendente, `existsByBebidaId`).
 - ✅ `.gitignore`.
-- ⬜ `service/`, `controller/`, `dto/`, `config/` (CORS desde `fonda.cors.origen`), `exception/`.
+- ✅ `BebidaService` (precio, CRUD, restricción, 409 si tiene ventas) con `BebidaRequest`, `BebidaResponse`, `BebidaNoEncontradaException` y `BebidaConVentasException`. Test de precio en `BebidaServiceTest`.
+- ⬜ `BebidaRequest`: falta el validador de las reglas que dependen del tipo (`gradosAlcohol` / `azucarPorLitro`).
+- ⬜ `VentaService`, DTOs de venta, `controller/`, `config/` (CORS desde `fonda.cors.origen`), `@RestControllerAdvice` en `exception/`.
 - ⬜ Frontend: `api.js` es solo el esqueleto (funciones con `TODO`). Faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
 - ⬜ Tests y `.github/workflows/build.yml`.
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
