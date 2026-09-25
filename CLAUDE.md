@@ -102,7 +102,8 @@ Resultados esperados con los datos de `data.sql`:
 - ✅ `api.js`: las 7 funciones implementadas. Todo error se lanza como `ApiError` con `status` (0 = sin conexión), `codigo`, `message` y `campos` (en el 400).
 - ✅ `BebidaList` montado en `App.jsx`: tabla, filtro por la API, restringir y eliminar, estados de carga, error y reintento. Probado en el navegador (CORS OK).
 - ✅ `BebidaForm` (crear y editar, errores 400 bajo cada campo, sin validación en el navegador). `App` coordina edición y recarga con `version`. `pesos()` en `utils/formato.js`.
-- ⬜ Frontend: faltan `VentaForm` y `VentaHistorial`.
+- ✅ `VentaForm`: total del backend si se autoriza, motivo si hay 409, errores 400 por campo. No bloquea bebidas restringidas ni limita unidades: decide el backend. `App` separa `version` (recarga datos) de `formulario` (reinicia `BebidaForm`).
+- ⬜ Frontend: falta `VentaHistorial`.
 - ⬜ `.github/workflows/build.yml` (los tests del backend ya existen: `mvn test`).
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
 - ✔️ Decidido: se agrega `GET /api/ventas/{id}` para que el `Location` del POST apunte a un recurso real.

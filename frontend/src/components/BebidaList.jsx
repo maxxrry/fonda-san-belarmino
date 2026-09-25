@@ -11,10 +11,11 @@ const TIPOS = { ALCOHOLICA: "Alcohólica", SIN_ALCOHOL: "Sin alcohol" };
  *
  * Props:
  * - onEditar(bebida): se llama al pulsar "Editar" en una fila.
- * - version: App la incrementa cuando otro componente cambia datos, y la
- *   lista se vuelve a pedir.
+ * - onCambio(): avisa a App que esta lista cambio datos (restringir, eliminar),
+ *   para que los demas componentes tambien se actualicen.
+ * - version: App la incrementa cuando cambian los datos, y la lista se vuelve a pedir.
  */
-export default function BebidaList({ onEditar, version = 0 }) {
+export default function BebidaList({ onEditar, onCambio, version = 0 }) {
   const [bebidas, setBebidas] = useState([]);
   const [texto, setTexto] = useState("");     // lo que se esta escribiendo
   const [nombre, setNombre] = useState("");   // el filtro ya enviado a la API
@@ -56,14 +57,15 @@ export default function BebidaList({ onEditar, version = 0 }) {
     setNombre("");
   }
 
-  // Envuelve una accion sobre una fila: bloquea sus botones, informa y recarga.
+  // Envuelve una accion sobre una fila: bloquea sus botones, informa y avisa
+  // a App, que sube version: asi se recargan esta lista y los demas componentes.
   async function ejecutar(bebida, accion, exito) {
     setProcesandoId(bebida.id);
     setAviso(null);
     try {
       await accion(bebida.id);
       setAviso({ variante: "success", texto: exito });
-      recargar();
+      onCambio();
     } catch (e) {
       setAviso({ variante: "danger", texto: e.message });
     } finally {

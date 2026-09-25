@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Alert, Container } from "react-bootstrap";
 import BebidaForm from "./components/BebidaForm.jsx";
 import BebidaList from "./components/BebidaList.jsx";
+import VentaForm from "./components/VentaForm.jsx";
 import { pesos } from "./utils/formato.js";
 
 /**
@@ -18,8 +19,11 @@ import { pesos } from "./utils/formato.js";
  */
 export default function App() {
   const [editando, setEditando] = useState(null); // bebida en edicion, o null
-  const [version, setVersion] = useState(0);      // sube cuando cambian los datos
+  const [version, setVersion] = useState(0);      // sube cuando cambian los datos: recargan las listas
+  const [formulario, setFormulario] = useState(0); // sube al guardar una bebida: reinicia BebidaForm
   const [aviso, setAviso] = useState(null);
+
+  const datosCambiaron = () => setVersion((v) => v + 1);
 
   function editar(bebida) {
     setAviso(null);
@@ -30,7 +34,8 @@ export default function App() {
   function alGuardar(bebida, esNueva) {
     setAviso(`"${bebida.nombre}" fue ${esNueva ? "creada" : "actualizada"}. Precio: ${pesos(bebida.precio)}.`);
     setEditando(null);
-    setVersion((v) => v + 1);
+    setFormulario((f) => f + 1);
+    datosCambiaron();
   }
 
   return (
@@ -47,13 +52,15 @@ export default function App() {
       {/* La key cambia al pasar a otra bebida o despues de guardar: React crea
           un formulario nuevo, con sus valores iniciales, en vez de reusar el anterior. */}
       <BebidaForm
-        key={editando ? `editar-${editando.id}` : `nueva-${version}`}
+        key={editando ? `editar-${editando.id}` : `nueva-${formulario}`}
         bebida={editando}
         onGuardada={alGuardar}
         onCancelar={() => setEditando(null)}
       />
 
-      <BebidaList onEditar={editar} version={version} />
+      <BebidaList onEditar={editar} onCambio={datosCambiaron} version={version} />
+
+      <VentaForm version={version} onIntento={datosCambiaron} />
     </Container>
   );
 }
