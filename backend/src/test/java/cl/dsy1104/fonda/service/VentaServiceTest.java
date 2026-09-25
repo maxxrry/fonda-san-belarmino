@@ -3,6 +3,7 @@ package cl.dsy1104.fonda.service;
 import cl.dsy1104.fonda.dto.VentaRequest;
 import cl.dsy1104.fonda.dto.VentaResponse;
 import cl.dsy1104.fonda.exception.BebidaNoEncontradaException;
+import cl.dsy1104.fonda.exception.VentaNoEncontradaException;
 import cl.dsy1104.fonda.exception.VentaRechazadaException;
 import cl.dsy1104.fonda.model.Bebida;
 import cl.dsy1104.fonda.model.EstadoVenta;
@@ -90,6 +91,23 @@ class VentaServiceTest {
                 () -> ventaService.registrar(new VentaRequest(9999L, 1)));
 
         assertEquals(ventasAntes, ventaRepository.count());
+    }
+
+    @Test
+    void buscarPorIdEntregaLaVentaRegistrada() {
+        Bebida mote = buscar("Mote con Huesillo", TipoBebida.SIN_ALCOHOL);
+        VentaResponse registrada = ventaService.registrar(new VentaRequest(mote.getId(), 1));
+
+        VentaResponse encontrada = ventaService.buscarPorId(registrada.id());
+
+        assertEquals(registrada.id(), encontrada.id());
+        assertEquals("Mote con Huesillo", encontrada.nombre());
+        assertEquals(EstadoVenta.AUTORIZADA, encontrada.estado());
+    }
+
+    @Test
+    void buscarPorIdInexistenteLanzaNoEncontrada() {
+        assertThrows(VentaNoEncontradaException.class, () -> ventaService.buscarPorId(9999L));
     }
 
     private Bebida buscar(String nombre, TipoBebida tipo) {

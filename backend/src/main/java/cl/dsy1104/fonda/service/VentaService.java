@@ -2,6 +2,7 @@ package cl.dsy1104.fonda.service;
 
 import cl.dsy1104.fonda.dto.VentaRequest;
 import cl.dsy1104.fonda.dto.VentaResponse;
+import cl.dsy1104.fonda.exception.VentaNoEncontradaException;
 import cl.dsy1104.fonda.exception.VentaRechazadaException;
 import cl.dsy1104.fonda.model.Bebida;
 import cl.dsy1104.fonda.model.EstadoVenta;
@@ -70,6 +71,14 @@ public class VentaService {
         return ventaRepository.findAllByOrderByFechaDesc().stream()
                 .map(VentaResponse::desde)
                 .toList();
+    }
+
+    /** Recurso al que apunta el Location del POST. Tambien entrega rechazadas. */
+    @Transactional(readOnly = true)
+    public VentaResponse buscarPorId(Long id) {
+        return ventaRepository.findById(id)
+                .map(VentaResponse::desde)
+                .orElseThrow(() -> new VentaNoEncontradaException(id));
     }
 
     // Las verificaciones en el orden del enunciado; gana la primera que falla.

@@ -70,6 +70,7 @@ El límite (3) se lee con `@Value("${fonda.limite-unidades-por-cliente}")`. **Nu
 | PATCH | `/api/bebidas/{id}/restriccion` | 200 · 404 |
 | POST | `/api/ventas` | 201 · 409 · 404 |
 | GET | `/api/ventas` | 200 |
+| GET | `/api/ventas/{id}` | 200 · 404 (extra: destino del `Location` del POST) |
 
 ## Contrato JSON (backend y frontend deben usar estos nombres)
 
@@ -99,7 +100,7 @@ Resultados esperados con los datos de `data.sql`:
 - ⬜ Frontend: `api.js` es solo el esqueleto (funciones con `TODO`). Faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
 - ⬜ Tests y `.github/workflows/build.yml`.
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
-- ⚠️ Pendiente decidir si se agrega `GET /api/ventas/{id}`: el `Location` del POST apunta ahí y hoy daría 404.
+- ✔️ Decidido: se agrega `GET /api/ventas/{id}` para que el `Location` del POST apunte a un recurso real. `VentaService.buscarPorId` ya existe; falta la ruta en `VentaController`.
 - ⚠️ Revisar que `data.sql` funcione en MySQL (en H2 ya carga).
 
 ## Cómo trabajar
