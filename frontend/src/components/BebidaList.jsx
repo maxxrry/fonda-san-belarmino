@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { Alert, Badge, Button, Form, InputGroup, Spinner, Table } from "react-bootstrap";
 import { eliminarBebida, listarBebidas, restringirVenta } from "../services/api.js";
+import { pesos } from "../utils/formato.js";
 
 const TIPOS = { ALCOHOLICA: "Alcohólica", SIN_ALCOHOL: "Sin alcohol" };
-
-// Solo formatea el numero que calculo el backend: 4200 -> "$4.200".
-const pesos = (valor) => valor.toLocaleString("es-CL", { style: "currency", currency: "CLP" });
 
 /**
  * Tabla del catalogo con filtro por nombre. El filtro lo aplica la API
  * (?nombre=), no este componente. Tambien permite restringir y eliminar.
+ *
+ * Props:
+ * - onEditar(bebida): se llama al pulsar "Editar" en una fila.
+ * - version: App la incrementa cuando otro componente cambia datos, y la
+ *   lista se vuelve a pedir.
  */
-export default function BebidaList() {
+export default function BebidaList({ onEditar, version = 0 }) {
   const [bebidas, setBebidas] = useState([]);
   const [texto, setTexto] = useState("");     // lo que se esta escribiendo
   const [nombre, setNombre] = useState("");   // el filtro ya enviado a la API
@@ -34,7 +37,7 @@ export default function BebidaList() {
     return () => {
       vigente = false;
     };
-  }, [nombre, recarga]);
+  }, [nombre, recarga, version]);
 
   const recargar = () => setRecarga((n) => n + 1);
 
@@ -144,6 +147,15 @@ export default function BebidaList() {
                     : <Badge bg="success">Disponible</Badge>}
                 </td>
                 <td className="text-nowrap">
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    className="me-2"
+                    disabled={procesandoId === b.id}
+                    onClick={() => onEditar(b)}
+                  >
+                    Editar
+                  </Button>
                   <Button
                     size="sm"
                     variant="outline-warning"
