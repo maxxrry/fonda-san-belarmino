@@ -66,7 +66,7 @@ El límite (3) se lee con `@Value("${fonda.limite-unidades-por-cliente}")`. **Nu
 | GET | `/api/bebidas/{id}` | 200 · 404 |
 | POST | `/api/bebidas` | 201 + Location · 400 |
 | PUT | `/api/bebidas/{id}` | 200 · 400 · 404 |
-| DELETE | `/api/bebidas/{id}` | 204 · 404 |
+| DELETE | `/api/bebidas/{id}` | 204 · 404 · 409 (si tiene ventas) |
 | PATCH | `/api/bebidas/{id}/restriccion` | 200 · 404 |
 | POST | `/api/ventas` | 201 · 409 · 404 |
 | GET | `/api/ventas` | 200 |
@@ -90,10 +90,12 @@ Resultados esperados con los datos de `data.sql`:
 
 - ✅ `model/`: `Bebida`, `Venta`, `TipoBebida`, `EstadoVenta`, `MotivoRechazo`.
 - ✅ `defer-datasource-initialization=true` en los dos `.properties`.
-- ⬜ `repository/`, `service/`, `controller/`, `dto/`, `config/` (CORS desde `fonda.cors.origen`), `exception/`.
+- ✅ `repository/`: `BebidaRepository` (filtro por nombre, contiene e ignora mayúsculas), `VentaRepository` (historial por fecha descendente, `existsByBebidaId`).
+- ✅ `.gitignore`.
+- ⬜ `service/`, `controller/`, `dto/`, `config/` (CORS desde `fonda.cors.origen`), `exception/`.
 - ⬜ Frontend: `api.js` es solo el esqueleto (funciones con `TODO`). Faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
-- ⬜ Tests, `.gitignore` y `.github/workflows/build.yml`.
-- ⚠️ Pendiente decidir qué pasa al eliminar una bebida con ventas (la FK falla): responder 409 o hacer borrado lógico.
+- ⬜ Tests y `.github/workflows/build.yml`.
+- ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
 - ⚠️ Pendiente decidir si se agrega `GET /api/ventas/{id}`: el `Location` del POST apunta ahí y hoy daría 404.
 - ⚠️ Revisar que `data.sql` funcione en MySQL (en H2 ya carga).
 
