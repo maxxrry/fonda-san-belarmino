@@ -71,7 +71,7 @@ El límite (3) se lee con `@Value("${fonda.limite-unidades-por-cliente}")`. **Nu
 | POST | `/api/ventas` | 201 · 409 · 404 |
 | GET | `/api/ventas` | 200 |
 
-## Contrato JSON (el frontend ya depende de estos nombres)
+## Contrato JSON (backend y frontend deben usar estos nombres)
 
 ```
 BebidaResponse: id, nombre, tipo, volumenML, stock, gradosAlcohol, certificada, azucarPorLitro, ventaRestringida, precio
@@ -90,11 +90,12 @@ Resultados esperados con los datos de `data.sql`:
 
 - ✅ `model/`: `Bebida`, `Venta`, `TipoBebida`, `EstadoVenta`, `MotivoRechazo`.
 - ✅ `defer-datasource-initialization=true` en los dos `.properties`.
-- ✅ Frontend: `api.js`, `BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`.
 - ⬜ `repository/`, `service/`, `controller/`, `dto/`, `config/` (CORS desde `fonda.cors.origen`), `exception/`.
+- ⬜ Frontend: `api.js` es solo el esqueleto (funciones con `TODO`). Faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
 - ⬜ Tests, `.gitignore` y `.github/workflows/build.yml`.
 - ⚠️ Pendiente decidir qué pasa al eliminar una bebida con ventas (la FK falla): responder 409 o hacer borrado lógico.
-- ⚠️ Revisar que `data.sql` funcione en MySQL.
+- ⚠️ Pendiente decidir si se agrega `GET /api/ventas/{id}`: el `Location` del POST apunta ahí y hoy daría 404.
+- ⚠️ Revisar que `data.sql` funcione en MySQL (en H2 ya carga).
 
 ## Cómo trabajar
 
