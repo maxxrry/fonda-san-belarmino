@@ -108,7 +108,7 @@ Resultados esperados con los datos de `data.sql`:
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
 - ✔️ Decidido: se agrega `GET /api/ventas/{id}` para que el `Location` del POST apunte a un recurso real.
 - ℹ️ Los `curl` de 409 y 400 del README no llevan `-H "Content-Type: application/json"`: sin esa cabecera la API responde 415. Al probar hay que agregarla.
-- ⚠️ Revisar que `data.sql` funcione en MySQL (en H2 ya carga).
+- ⚠️ Perfil `mysql` sin probar (no hay MySQL ni Docker en este PC). En H2 todo funciona. Riesgo principal: `data.sql` usa `INSERT ... SELECT ... WHERE NOT EXISTS (SELECT 1 FROM bebida ...)` sin `FROM` en el `SELECT` externo; MySQL 8 lo acepta, versiones antiguas (5.7) no. Si falla, agregar `FROM DUAL` antes del `WHERE`. Para probar: `CREATE DATABASE fonda CHARACTER SET utf8mb4;` y levantar con `-Dspring-boot.run.profiles=mysql`.
 
 ## Cómo trabajar
 
