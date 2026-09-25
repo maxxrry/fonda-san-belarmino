@@ -66,4 +66,18 @@ class ContratoApiTest {
                 .andExpect(jsonPath("$.campos.nombre").value("no puede estar vacio"))
                 .andExpect(jsonPath("$.campos.volumenML").value("debe estar entre 100 y 3000"));
     }
+
+    @Test
+    void alcoholicaSinGradosResponde400EnElCampoGradosAlcohol() throws Exception {
+        mvc.perform(post("/api/bebidas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"nombre": "Terremoto", "tipo": "ALCOHOLICA",
+                                 "volumenML": 500, "stock": 10, "azucarPorLitro": 30}
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("VALIDACION"))
+                .andExpect(jsonPath("$.campos.gradosAlcohol").value("es obligatorio en bebidas alcoholicas"))
+                .andExpect(jsonPath("$.campos.azucarPorLitro").value("debe quedar vacio en bebidas alcoholicas"));
+    }
 }

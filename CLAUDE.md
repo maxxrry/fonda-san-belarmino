@@ -94,13 +94,13 @@ Resultados esperados con los datos de `data.sql`:
 - ✅ `repository/`: `BebidaRepository` (filtro por nombre, contiene e ignora mayúsculas), `VentaRepository` (historial por fecha descendente, `existsByBebidaId`).
 - ✅ `.gitignore`.
 - ✅ `BebidaService` (precio, CRUD, restricción, 409 si tiene ventas) con `BebidaRequest`, `BebidaResponse`, `BebidaNoEncontradaException` y `BebidaConVentasException`. Test de precio en `BebidaServiceTest`.
-- ⬜ `BebidaRequest`: falta el validador de las reglas que dependen del tipo (`gradosAlcohol` / `azucarPorLitro`).
+- ✅ `validation/`: `@AtributosSegunTipo` (restricción de clase sobre `BebidaRequest`) exige o prohíbe `gradosAlcohol` / `azucarPorLitro` según el tipo. Los rangos van como anotaciones de campo. Test en `BebidaRequestValidacionTest`.
 - ✅ `VentaService` (3 verificaciones en orden, stock, total, rechazada guardada con `noRollbackFor`) con `VentaRequest`, `VentaResponse` y `VentaRechazadaException`. Test de integración en `VentaServiceTest`.
 - ✅ `ManejadorGlobalErrores` (`@RestControllerAdvice` que extiende `ResponseEntityExceptionHandler`): 400 `VALIDACION`, 404, 409 y resto de errores de Spring MVC con el formato del contrato; 500 genérico sin traza.
 - ✅ `BebidaController` y `VentaController` (9 rutas, incluida `GET /api/ventas/{id}`). Probados con `curl`; los ejemplos de la sección 7 quedan en `ContratoApiTest` (MockMvc).
 - ✅ `CorsConfig`: autoriza `fonda.cors.origen` en `/api/**` y expone `Location`. Test en `CorsConfigTest`.
 - ⬜ Frontend: `api.js` es solo el esqueleto (funciones con `TODO`). Faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
-- ⬜ Tests y `.github/workflows/build.yml`.
+- ⬜ `.github/workflows/build.yml` (los tests del backend ya existen: `mvn test`).
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
 - ✔️ Decidido: se agrega `GET /api/ventas/{id}` para que el `Location` del POST apunte a un recurso real.
 - ℹ️ Los `curl` de 409 y 400 del README no llevan `-H "Content-Type: application/json"`: sin esa cabecera la API responde 415. Al probar hay que agregarla.
