@@ -100,7 +100,8 @@ Resultados esperados con los datos de `data.sql`:
 - ✅ `BebidaController` y `VentaController` (9 rutas, incluida `GET /api/ventas/{id}`). Probados con `curl`; los ejemplos de la sección 7 quedan en `ContratoApiTest` (MockMvc).
 - ✅ `CorsConfig`: autoriza `fonda.cors.origen` en `/api/**` y expone `Location`. Test en `CorsConfigTest`.
 - ✅ `api.js`: las 7 funciones implementadas. Todo error se lanza como `ApiError` con `status` (0 = sin conexión), `codigo`, `message` y `campos` (en el 400).
-- ⬜ Frontend: faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
+- ✅ `BebidaList` montado en `App.jsx`: tabla, filtro por la API, restringir y eliminar, estados de carga, error y reintento. Probado en el navegador (CORS OK).
+- ⬜ Frontend: faltan `BebidaForm` (crear y editar; el botón Editar va en `BebidaList`), `VentaForm` y `VentaHistorial`.
 - ⬜ `.github/workflows/build.yml` (los tests del backend ya existen: `mvn test`).
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
 - ✔️ Decidido: se agrega `GET /api/ventas/{id}` para que el `Location` del POST apunte a un recurso real.

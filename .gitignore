@@ -22,3 +22,6 @@ Thumbs.db
 
 # --- Logs ---
 *.log
+
+# --- Configuracion local de herramientas (Claude Code) ---
+.claude/
