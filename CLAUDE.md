@@ -96,7 +96,8 @@ Resultados esperados con los datos de `data.sql`:
 - ✅ `BebidaService` (precio, CRUD, restricción, 409 si tiene ventas) con `BebidaRequest`, `BebidaResponse`, `BebidaNoEncontradaException` y `BebidaConVentasException`. Test de precio en `BebidaServiceTest`.
 - ⬜ `BebidaRequest`: falta el validador de las reglas que dependen del tipo (`gradosAlcohol` / `azucarPorLitro`).
 - ✅ `VentaService` (3 verificaciones en orden, stock, total, rechazada guardada con `noRollbackFor`) con `VentaRequest`, `VentaResponse` y `VentaRechazadaException`. Test de integración en `VentaServiceTest`.
-- ⬜ `controller/`, `config/` (CORS desde `fonda.cors.origen`), `@RestControllerAdvice` en `exception/`.
+- ✅ `ManejadorGlobalErrores` (`@RestControllerAdvice` que extiende `ResponseEntityExceptionHandler`): 400 `VALIDACION`, 404, 409 y resto de errores de Spring MVC con el formato del contrato; 500 genérico sin traza.
+- ⬜ `controller/` (incluida `GET /api/ventas/{id}`), `config/` (CORS desde `fonda.cors.origen`).
 - ⬜ Frontend: `api.js` es solo el esqueleto (funciones con `TODO`). Faltan `components/` (`BebidaList`, `BebidaForm`, `VentaForm`, `VentaHistorial`) y montarlos en `App.jsx`.
 - ⬜ Tests y `.github/workflows/build.yml`.
 - ✔️ Decidido: eliminar una bebida con ventas responde 409 `BEBIDA_CON_VENTAS`, porque borrarla rompería el historial. El service lo verifica con `VentaRepository.existsByBebidaId` antes de borrar.
